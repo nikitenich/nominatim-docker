@@ -70,6 +70,9 @@ RUN true \
 # Osmium install to run continuous updates.
 RUN pip3 install osmium
 
+# Install other python dependencies
+RUN pip install sqlalchemy geoalchemy2 asyncpg
+
 # Nominatim install.
 ENV NOMINATIM_VERSION=4.2.3
 ARG USER_AGENT=mediagis/nominatim-docker:${NOMINATIM_VERSION}
