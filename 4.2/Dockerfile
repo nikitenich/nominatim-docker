@@ -58,6 +58,7 @@ RUN true \
         # Misc.
         git \
         curl \
+        unzip \
         sudo
 
 
@@ -74,11 +75,13 @@ ENV NOMINATIM_VERSION=4.2.3
 ARG USER_AGENT=mediagis/nominatim-docker:${NOMINATIM_VERSION}
 
 RUN true \
-    && curl -A $USER_AGENT https://nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar.bz2 -o nominatim.tar.bz2 \
-    && tar xf nominatim.tar.bz2 \
+    # && curl -A $USER_AGENT https://nominatim.org/release/Nominatim-$NOMINATIM_VERSION.tar.bz2 -o nominatim.tar.bz2 \
+    # && tar xf nominatim.tar.bz2 \
+    && curl -A ${USER_AGENT} https://github.com/osm-search/Nominatim/archive/refs/heads/master.zip -o nominatim-master.zip \
+    && unzip nominatim-master.zip \
     && mkdir build \
     && cd build \
-    && cmake ../Nominatim-$NOMINATIM_VERSION \
+    && cmake ../Nominatim-master \
     && make -j`nproc` \
     && make install
 
@@ -98,6 +101,7 @@ RUN true \
         build-essential \
         liblua*-dev \
         postgresql-server-dev-14 \
+        unzip \
     && apt-get clean \
     # Clear temporary files and directories.
     && rm -rf \
@@ -109,7 +113,7 @@ RUN true \
     # Remove nominatim source and build directories
     && rm /app/*.tar.bz2 \
     && rm -rf /app/build \
-    && rm -rf /app/Nominatim-$NOMINATIM_VERSION
+    && rm -rf /app/Nominatim-master
 
 # Apache configuration
 COPY conf.d/apache.conf /etc/apache2/sites-enabled/000-default.conf
