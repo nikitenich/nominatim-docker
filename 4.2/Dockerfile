@@ -111,7 +111,7 @@ RUN true \
         /app/src/.git \
         /var/lib/apt/lists/* \
     # Remove nominatim source and build directories
-    && rm /app/*.tar.bz2 \
+    # && rm /app/*.tar.bz2 \
     && rm -rf /app/build \
     && rm -rf /app/Nominatim-repo
 
